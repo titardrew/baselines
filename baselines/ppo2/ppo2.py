@@ -185,8 +185,17 @@ def learn(*, network, env, total_timesteps, eval_env = None, seed=None, nsteps=2
             logger.logkv("total_timesteps", update*nbatch)
             logger.logkv("fps", fps)
             logger.logkv("explained_variance", float(ev))
-            logger.logkv('eprewmean', safemean([epinfo['r'] for epinfo in epinfobuf]))
-            logger.logkv('eplenmean', safemean([epinfo['l'] for epinfo in epinfobuf]))
+            logger.logkv('reward_min', safe_min([epinfo['r'] for epinfo in epinfobuf]))
+            logger.logkv('reward_mean', safemean([epinfo['r'] for epinfo in epinfobuf]))
+            logger.logkv('reward_max', safe_max([epinfo['r'] for epinfo in epinfobuf]))
+            logger.logkv('len_min', safe_min([epinfo['l'] for epinfo in epinfobuf]))
+            logger.logkv('len_mean', safemean([epinfo['l'] for epinfo in epinfobuf]))
+            logger.logkv('len_max', safe_max([epinfo['l'] for epinfo in epinfobuf]))
+            logger.logkv('dist_min', safe_min([epinfo['d'] for epinfo in epinfobuf]))
+            logger.logkv('dist_mean', safemean([epinfo['d'] for epinfo in epinfobuf]))
+            logger.logkv('dist_max', safe_max([epinfo['d'] for epinfo in epinfobuf]))
+            logger.logkv('init_dist', safemean([epinfo['i'] for epinfo in epinfobuf]))
+
             if eval_env is not None:
                 logger.logkv('eval_eprewmean', safemean([epinfo['r'] for epinfo in eval_epinfobuf]) )
                 logger.logkv('eval_eplenmean', safemean([epinfo['l'] for epinfo in eval_epinfobuf]) )
@@ -206,5 +215,8 @@ def learn(*, network, env, total_timesteps, eval_env = None, seed=None, nsteps=2
 def safemean(xs):
     return np.nan if len(xs) == 0 else np.mean(xs)
 
+def safe_min(xs):
+    return np.nan if len(xs) == 0 else np.min(xs)
 
-
+def safe_max(xs):
+    return np.nan if len(xs) == 0 else np.max(xs)
