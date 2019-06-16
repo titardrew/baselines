@@ -196,14 +196,6 @@ def learn(*, network, env, total_timesteps, eval_env = None, seed=None, nsteps=2
             logger.logkv('dist_max', safe_max([epinfo['d'] for epinfo in epinfobuf]))
             logger.logkv('init_dist', safemean([epinfo['i'] for epinfo in epinfobuf]))
 
-            logger.logkv('trew_min', safe_min([epinfo['tr'] for epinfo in epinfobuf]))
-            logger.logkv('trew_mean', safemean([epinfo['tr'] for epinfo in epinfobuf]))
-            logger.logkv('trew_max', safe_max([epinfo['tr'] for epinfo in epinfobuf]))
-
-            logger.logkv('drew_min', safe_min([epinfo['dr'] for epinfo in epinfobuf]))
-            logger.logkv('drew_mean', safemean([epinfo['dr'] for epinfo in epinfobuf]))
-            logger.logkv('drew_max', safe_max([epinfo['dr'] for epinfo in epinfobuf]))
-
             if eval_env is not None:
                 logger.logkv('eval_eprewmean', safemean([epinfo['r'] for epinfo in eval_epinfobuf]) )
                 logger.logkv('eval_eplenmean', safemean([epinfo['l'] for epinfo in eval_epinfobuf]) )
